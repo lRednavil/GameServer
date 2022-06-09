@@ -10,6 +10,7 @@
 #include "CUnit_Game.h"
 
 WCHAR IP[16] = L"127.0.0.1";
+#define PORT 40000
 
 CTestGameClass test;
 CUnit_Auth authClass;
@@ -17,12 +18,12 @@ CUnit_Game gameClass;
 
 int main()
 {
-    test.Start(IP, 40000, 4, 4, true, 6000);
+    test.Start(IP, PORT, 4, 4, true, 6000);
 
-    authClass.InitClass(100, authClass.OPT_STOP);
+    authClass.InitClass(100, authClass.OPT_STOP, 6000);
     test.AttatchClass(L"Auth", &authClass);
 
-    gameClass.InitClass(100, gameClass.OPT_STOP);
+    gameClass.InitClass(100, gameClass.OPT_STOP, 6000);
     test.AttatchClass(L"Game", &gameClass);
 
 

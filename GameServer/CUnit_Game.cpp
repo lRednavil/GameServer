@@ -2,10 +2,12 @@
 
 void CUnit_Game::OnClientJoin(DWORD64 sessionID)
 {
+    _FILE_LOG(LOG_LEVEL_DEBUG, L"Game_Log", L"Client Join");
 }
 
 void CUnit_Game::OnClientLeave(DWORD64 sessionID)
 {
+    _FILE_LOG(LOG_LEVEL_DEBUG, L"Game_Log", L"Client Leave");
 }
 
 void CUnit_Game::OnRecv(DWORD64 sessionID, CPacket* packet)

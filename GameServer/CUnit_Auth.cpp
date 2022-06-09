@@ -2,12 +2,12 @@
 
 void CUnit_Auth::OnClientJoin(DWORD64 sessionID)
 {
-    
+    _FILE_LOG(LOG_LEVEL_DEBUG, L"Auth_Log", L"Client Join");
 }
 
 void CUnit_Auth::OnClientLeave(DWORD64 sessionID)
 {
-
+    _FILE_LOG(LOG_LEVEL_DEBUG, L"Auth_Log", L"Client Leave");
 }
 
 void CUnit_Auth::OnRecv(DWORD64 sessionID, CPacket* packet)
