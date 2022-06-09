@@ -30,6 +30,7 @@ void CUnit_Game::OnRecv(DWORD64 sessionID, CPacket* packet)
 
     case en_PACKET_CS_GAME_REQ_HEARTBEAT:
     {
+        _FILE_LOG(LOG_LEVEL_DEBUG, L"GAME_DEBUG_LOG", L"default Msg Enqueued");
         PacketFree(packet);
         break;
     }

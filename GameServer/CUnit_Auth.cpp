@@ -30,6 +30,7 @@ void CUnit_Auth::OnRecv(DWORD64 sessionID, CPacket* packet)
     
     case en_PACKET_CS_GAME_REQ_HEARTBEAT:
     {
+        _FILE_LOG(LOG_LEVEL_DEBUG, L"AUTH_DEBUG_LOG", L"HeartBeat Recved");
         PacketFree(packet);
         break;
     }
@@ -64,6 +65,7 @@ void CUnit_Auth::MsgUpdate()
         break;
 
         default:
+            _FILE_LOG(LOG_LEVEL_DEBUG, L"AUTH_DEBUG_LOG", L"default Msg Enqueued");
             Disconnect(job.sessionID);
         }
 
@@ -94,13 +96,13 @@ void CUnit_Auth::Recv_Login(DWORD64 sessionID, CPacket* packet)
         return;
     }
 
-    Res_Login(sessionID, 1);
     MoveClass(L"Game", sessionID);
+    Res_Login(sessionID, 1);
 }
 
 void CUnit_Auth::Res_Login(DWORD64 sessionID, BYTE res)
 {
     CPacket* packet = PacketAlloc();
-
-
+    constexpr WORD type = en_PACKET_CS_GAME_RES_LOGIN;
+    
 }
