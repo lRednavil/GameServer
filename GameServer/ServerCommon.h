@@ -17,6 +17,11 @@
 #include "include/Logging.h"
 #include "include/GameServer.h"
 
+#define CRASH() do{ \
+int *p = 0; \
+*p = 0;	\
+}while(0) \
+
 struct JOB {
 	WORD type;
 

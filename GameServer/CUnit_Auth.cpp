@@ -1,13 +1,18 @@
 #include "CUnit_Auth.h"
 
-void CUnit_Auth::OnClientJoin(DWORD64 sessionID)
+void CUnit_Auth::OnClientJoin(DWORD64 sessionID, CPacket* packet)
 {
-    _FILE_LOG(LOG_LEVEL_DEBUG, L"Auth_Log", L"Client Join");
+    int x = 1;
 }
 
 void CUnit_Auth::OnClientLeave(DWORD64 sessionID)
 {
-    _FILE_LOG(LOG_LEVEL_DEBUG, L"Auth_Log", L"Client Leave");
+    
+}
+
+void CUnit_Auth::OnClientDisconnected(DWORD64 sessionID)
+{
+    
 }
 
 void CUnit_Auth::OnRecv(DWORD64 sessionID, CPacket* packet)
@@ -30,7 +35,6 @@ void CUnit_Auth::OnRecv(DWORD64 sessionID, CPacket* packet)
     
     case en_PACKET_CS_GAME_REQ_HEARTBEAT:
     {
-        _FILE_LOG(LOG_LEVEL_DEBUG, L"AUTH_DEBUG_LOG", L"HeartBeat Recved");
         PacketFree(packet);
         break;
     }
@@ -65,7 +69,6 @@ void CUnit_Auth::MsgUpdate()
         break;
 
         default:
-            _FILE_LOG(LOG_LEVEL_DEBUG, L"AUTH_DEBUG_LOG", L"default Msg Enqueued");
             Disconnect(job.sessionID);
         }
 
@@ -86,23 +89,39 @@ void CUnit_Auth::Recv_Login(DWORD64 sessionID, CPacket* packet)
 
     int version;
 
-    *packet >> accountNo;
-    packet->GetData(sessionKey, 64);
+    PLAYER* player = g_playerPool.Alloc();
+    
+    *packet >> player->accountNo;
+    packet->GetData(player->sessionKey, 64);
+
     *packet >> version;
 
     if (version != 1) {
-        Res_Login(sessionID, 0);
+        Res_Login(sessionID, 0, player);
+        g_playerPool.Free(player);
         Disconnect(sessionID);
         return;
     }
 
-    MoveClass(L"Game", sessionID);
-    Res_Login(sessionID, 1);
+    Res_Login(sessionID, 1, player);
 }
 
-void CUnit_Auth::Res_Login(DWORD64 sessionID, BYTE res)
+void CUnit_Auth::Res_Login(DWORD64 sessionID, BYTE res, PLAYER* player)
 {
     CPacket* packet = PacketAlloc();
     constexpr WORD type = en_PACKET_CS_GAME_RES_LOGIN;
+
+    CPacket* moveInfo;
+
+    *packet << type << player->accountNo;
     
+    if (res == 0) {
+        g_playerPool.Free(player);
+    }
+    else {
+        moveInfo = PacketAlloc();
+        MoveClass(L"Game", sessionID, moveInfo);
+    }
+
+    SendPacket(sessionID, packet);
 }

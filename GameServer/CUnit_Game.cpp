@@ -1,13 +1,29 @@
 #include "CUnit_Game.h"
 
-void CUnit_Game::OnClientJoin(DWORD64 sessionID)
+void CUnit_Game::OnClientJoin(DWORD64 sessionID, CPacket* packet)
 {
-    _FILE_LOG(LOG_LEVEL_DEBUG, L"Game_Log", L"Client Join");
+    if (packet == NULL) {
+        CRASH();
+    }
+
+    PLAYER* player;
+    packet->GetData((char*)&player, sizeof(PLAYER*));
+
+    playerMap.insert({ sessionID, player });
 }
 
 void CUnit_Game::OnClientLeave(DWORD64 sessionID)
 {
-    _FILE_LOG(LOG_LEVEL_DEBUG, L"Game_Log", L"Client Leave");
+    if (playerMap.find(sessionID) != playerMap.end()) {
+        playerMap.erase(sessionID);
+    }
+}
+
+void CUnit_Game::OnClientDisconnected(DWORD64 sessionID)
+{
+    if (playerMap.find(sessionID) != playerMap.end()) {
+        g_playerPool.Free(playerMap[sessionID]);
+    }
 }
 
 void CUnit_Game::OnRecv(DWORD64 sessionID, CPacket* packet)
