@@ -9,7 +9,7 @@ bool CTestGameClass::OnConnectionRequest(WCHAR* IP, DWORD Port)
 bool CTestGameClass::OnClientJoin(DWORD64 sessionID)
 {
 	SetTimeOut(sessionID, INFINITE);
-	//MoveClass(L"Auth", sessionID, NULL, 0);
+	MoveClass(L"Auth", sessionID, NULL, 0);
 	return true;
 }
 
