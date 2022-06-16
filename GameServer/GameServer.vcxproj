@@ -144,7 +144,7 @@
   <ItemGroup>
     <ClCompile Include="CUnit_Auth.cpp" />
     <ClCompile Include="CUnit_Game.cpp" />
-    <ClCompile Include="GameServer.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="ServerCommon.cpp" />
     <ClCompile Include="TestGameClass.cpp" />
   </ItemGroup>
