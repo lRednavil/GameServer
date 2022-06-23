@@ -5,7 +5,6 @@ void CUnit_Game::OnClientJoin(DWORD64 sessionID, CPacket* packet)
     if (packet == NULL) {
         CRASH();
     }
-
     PLAYER* player;
     packet->GetData((char*)&player, sizeof(PLAYER*));
 
@@ -22,7 +21,8 @@ void CUnit_Game::OnClientLeave(DWORD64 sessionID)
 void CUnit_Game::OnClientDisconnected(DWORD64 sessionID)
 {
     if (playerMap.find(sessionID) != playerMap.end()) {
-        g_playerPool.Free(playerMap[sessionID]);
+       //g_playerPool.Free(playerMap[sessionID]);
+        playerMap.erase(sessionID);
     }
 }
 
@@ -46,7 +46,6 @@ void CUnit_Game::OnRecv(DWORD64 sessionID, CPacket* packet)
 
     case en_PACKET_CS_GAME_REQ_HEARTBEAT:
     {
-        _FILE_LOG(LOG_LEVEL_DEBUG, L"GAME_DEBUG_LOG", L"default Msg Enqueued");
         PacketFree(packet);
         break;
     }
@@ -73,7 +72,7 @@ void CUnit_Game::MsgUpdate()
 
     while (jobQ.Dequeue(&job)) {
         switch (job.type) {
-        case en_PACKET_CS_GAME_REQ_LOGIN:
+        case en_PACKET_CS_GAME_REQ_ECHO:
         {
             Recv_Echo(job.sessionID, job.packet);
         }
@@ -94,19 +93,18 @@ void CUnit_Game::FrameUpdate()
 
 void CUnit_Game::Recv_Echo(DWORD64 sessionID, CPacket* packet)
 {
-    CPacket* sendMsg = PacketAlloc();
-
-    INT64 accountNo;
-    LONGLONG sendTick;
-
-    *packet >> accountNo >> sendTick;
-
-    *sendMsg << accountNo << sendTick;
-
-    Res_Echo(sessionID, sendMsg);
+    Res_Echo(sessionID, packet);
 }
 
 void CUnit_Game::Res_Echo(DWORD64 sessionID, CPacket* packet)
 {
-    SendPacket(sessionID, packet);
+    CPacket* sendMsg = PacketAlloc();
+    constexpr WORD type = en_PACKET_CS_GAME_RES_ECHO;
+    int len = packet->GetDataSize();
+
+    *sendMsg << type;
+    packet->GetData(sendMsg->GetWritePtr(), len);
+    sendMsg->MoveWritePos(len);
+
+    SendPacket(sessionID, sendMsg);
 }

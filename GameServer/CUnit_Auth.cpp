@@ -113,13 +113,14 @@ void CUnit_Auth::Res_Login(DWORD64 sessionID, BYTE res, PLAYER* player)
 
     CPacket* moveInfo;
 
-    *packet << type << player->accountNo;
+    *packet << (WORD)type << res << player->accountNo;
     
     if (res == 0) {
         g_playerPool.Free(player);
     }
     else {
         moveInfo = PacketAlloc();
+        moveInfo->PutData((char*)player, sizeof(PLAYER));
         MoveClass(L"Game", sessionID, moveInfo);
     }
 

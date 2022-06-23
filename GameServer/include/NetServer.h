@@ -9,14 +9,17 @@ class CNetServer
 {
 public:
 	//오픈 IP / 포트 / 워커스레드 수(생성수, 러닝수) / 나글옵션 / 최대접속자 수
-	bool Start(WCHAR* IP, DWORD port, DWORD createThreads, DWORD runningThreads, bool isNagle, DWORD maxConnect);
+	bool Start(const WCHAR * IP, DWORD port, DWORD createThreads, DWORD runningThreads, bool isNagle, DWORD maxConnect, DWORD snapLatency, int packetSize = CPacket::eBUFFER_DEFAULT);
 	void Stop();
+
 	int GetSessionCount();
 	//모니터링용 함수
 	void Monitor();
 
 	bool Disconnect(DWORD64 sessionID);
 	bool SendPacket(DWORD64 sessionID, CPacket* packet);
+	//가볍게 enq만 할 경우
+	bool SendEnQ(DWORD64 sessionID, CPacket* packet);
 	bool SendAndDisconnect(DWORD64 sessionID, CPacket* packet);
 	bool SendAndDisconnect(DWORD64 sessionID, CPacket* packet, DWORD timeOutVal);
 
@@ -26,6 +29,8 @@ public:
 
 	void SetTimeOut(DWORD64 sessionID, DWORD timeVal, bool recvTimeReset = false);
 
+	//시동함수 작성용
+	virtual void Init() = 0;
 	//accept 직후, IP filterinig 등의 목적
 	virtual bool OnConnectionRequest(WCHAR* IP, DWORD Port) = 0;
 	//return false; 시 클라이언트 거부.
@@ -41,8 +46,11 @@ public:
 
 	virtual void OnError(int error, const WCHAR* msg) = 0;
 
+	//종료함수 작성용
+	virtual void OnStop() = 0;
 private:
-	bool NetInit(WCHAR* IP, DWORD port, bool isNagle);
+
+	bool NetInit(const WCHAR * IP, DWORD port, bool isNagle);
 	bool ThreadInit(const DWORD createThreads, const DWORD runningThreads);
 
 	void NetClose();
@@ -72,6 +80,12 @@ private:
 	static unsigned int __stdcall WorkProc(void* arg);
 	static unsigned int __stdcall AcceptProc(void* arg);
 	static unsigned int __stdcall TimerProc(void* arg);
+	static unsigned int __stdcall SendProc(void* arg);
+	void _WorkProc();
+	void _AcceptProc();
+	void _TimerProc();
+	void _SendProc();
+
 	void RecvProc(SESSION* session);
 	bool RecvPost(SESSION* session);
 	bool SendPost(SESSION* session);
@@ -100,6 +114,7 @@ private:
 	SESSION* sessionArr;
 	//stack for session index
 	CLockFreeStack<int> sessionStack;
+	CLockFreeQueue<DWORD64> sendSessionQ;
 
 	//monitor
 	DWORD sessionCnt;
@@ -111,8 +126,13 @@ private:
 	CProcessorMonitor* totalMonitor;
 
 	//readonly
+	LPFN_TRANSMITPACKETS transFn;
+	CTLSMemoryPool<CPacket>* packetPool;
+	int packetSize;
 	SOCKET listenSock;
+	DWORD snapLatency;
 	HANDLE hIOCP;
+	int threadCnt;
 
 	HANDLE* hThreads;
 };

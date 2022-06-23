@@ -23,7 +23,7 @@ int main()
     authClass.InitClass(100, authClass.OPT_STOP, 6000);
     test.AttatchClass(L"Auth", &authClass);
 
-    gameClass.InitClass(100, gameClass.OPT_STOP, 6000);
+    gameClass.InitClass(100, gameClass.OPT_STOP, 6000, 5000);
     test.AttatchClass(L"Game", &gameClass);
 
 
