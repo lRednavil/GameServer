@@ -18,17 +18,16 @@ CUnit_Game gameClass;
 
 int main()
 {
-    test.Start(IP, PORT, 4, 4, true, 6000);
+    test.Start(IP, PORT, 4, 4, true, 6000, 3);
 
     authClass.InitClass(100, authClass.OPT_STOP, 6000);
     test.AttatchClass(L"Auth", &authClass);
 
-    gameClass.InitClass(100, gameClass.OPT_STOP, 6000, 5000);
+    gameClass.InitClass(100, gameClass.OPT_STOP, 6000);
     test.AttatchClass(L"Game", &gameClass);
 
 
     for (;;) {
-        test.Monitor();
         Sleep(1000);
     }
 

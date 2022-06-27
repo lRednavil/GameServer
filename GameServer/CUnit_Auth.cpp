@@ -2,17 +2,16 @@
 
 void CUnit_Auth::OnClientJoin(DWORD64 sessionID, CPacket* packet)
 {
-    int x = 1;
 }
 
 void CUnit_Auth::OnClientLeave(DWORD64 sessionID)
 {
-    
+
 }
 
 void CUnit_Auth::OnClientDisconnected(DWORD64 sessionID)
 {
-    
+
 }
 
 void CUnit_Auth::OnRecv(DWORD64 sessionID, CPacket* packet)

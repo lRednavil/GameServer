@@ -20,8 +20,9 @@ void CUnit_Game::OnClientLeave(DWORD64 sessionID)
 
 void CUnit_Game::OnClientDisconnected(DWORD64 sessionID)
 {
+
     if (playerMap.find(sessionID) != playerMap.end()) {
-       //g_playerPool.Free(playerMap[sessionID]);
+        g_playerPool.Free(playerMap[sessionID]);
         playerMap.erase(sessionID);
     }
 }
