@@ -34,7 +34,7 @@ bool CTestServer::OnConnectionRequest(WCHAR* IP, DWORD Port)
 
 bool CTestServer::OnClientJoin(DWORD64 sessionID)
 {
-	SetTimeOut(sessionID, INFINITE);
+	SetTimeOut(sessionID, 1000000);
 	MoveClass(L"Auth", sessionID, NULL, 0);
 	return true;
 }

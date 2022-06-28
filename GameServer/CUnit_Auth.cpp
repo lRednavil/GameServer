@@ -22,7 +22,7 @@ void CUnit_Auth::OnClientLeave(DWORD64 sessionID)
 
 void CUnit_Auth::OnClientDisconnected(DWORD64 sessionID)
 {
-
+    playerCnt--;
 }
 
 void CUnit_Auth::OnRecv(DWORD64 sessionID, CPacket* packet)
@@ -130,8 +130,8 @@ void CUnit_Auth::Res_Login(DWORD64 sessionID, BYTE res, PLAYER* player)
         g_playerPool.Free(player);
     }
     else {
-        moveInfo = PacketAlloc();
-        moveInfo->PutData((char*)player, sizeof(PLAYER));
+        moveInfo = InfoAlloc();
+        moveInfo->PutData((char*)&player, sizeof(void*));
         MoveClass(L"Game", sessionID, moveInfo);
     }
 

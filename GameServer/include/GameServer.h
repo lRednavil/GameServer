@@ -41,6 +41,7 @@ public:
 
 	//기본 참조카운트 1부여 및 초기화 실행
 	CPacket* PacketAlloc();
+	CPacket* InfoAlloc();
 	void	PacketFree(CPacket* packet);
 	int		GetPacketPoolCapacity();
 	int		GetPacketPoolUse();
@@ -81,6 +82,7 @@ private:
 	alignas(64)
 	CLockFreeQueue<MOVE_INFO>* joinQ;
 	CLockFreeQueue<MOVE_INFO>* leaveQ;
+	CLockFreeQueue<MOVE_INFO>* disconnectQ;
 	WORD frameDelay; //1초 / targetFrame
 	BYTE endOption;
 	CGameServer* server = nullptr;
@@ -124,6 +126,7 @@ public:
 
 	//기본 참조카운트 1부여 및 초기화 실행
 	CPacket* PacketAlloc();
+	CPacket* InfoAlloc();
 	void	PacketFree(CPacket* packet);
 	int		GetPacketPoolCapacity();
 	int		GetPacketPoolUse();
