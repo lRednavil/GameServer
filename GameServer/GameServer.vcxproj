@@ -145,14 +145,16 @@
     <ClCompile Include="CUnit_Auth.cpp" />
     <ClCompile Include="CUnit_Game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MonitorClient.cpp" />
     <ClCompile Include="ServerCommon.cpp" />
-    <ClCompile Include="TestGameClass.cpp" />
+    <ClCompile Include="GameServer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonProtocol.h" />
     <ClInclude Include="CUnit_Auth.h" />
     <ClInclude Include="CUnit_Game.h" />
-    <ClInclude Include="TestGameClass.h" />
+    <ClInclude Include="GameServer.h" />
+    <ClInclude Include="MonitorClient.h" />
     <ClInclude Include="ServerCommon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

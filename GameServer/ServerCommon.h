@@ -14,14 +14,16 @@
 #include "include/SerializedBuffer.h"
 #include "include/ErrorReason.h"
 
+#include "include/ProcessMonitor.h"
+#include "include/ProcessorMonitor.h"
+
 #include "include/Logging.h"
+#include "include/Dump.h"
+
+#include "include/LanClient.h"
 #include "include/GameServer.h"
 
-#define CRASH() do{ \
-int *p = 0; \
-*p = 0;	\
-}while(0) \
-
+#include "MonitorClient.h"
 struct JOB {
 	WORD type;
 

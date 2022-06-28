@@ -18,7 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TestGameClass.cpp">
+    <ClCompile Include="GameServer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="CUnit_Auth.cpp">
@@ -30,12 +30,15 @@
     <ClCompile Include="ServerCommon.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="MonitorClient.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonProtocol.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="TestGameClass.h">
+    <ClInclude Include="GameServer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="ServerCommon.h">
@@ -45,6 +48,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="CUnit_Game.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MonitorClient.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
