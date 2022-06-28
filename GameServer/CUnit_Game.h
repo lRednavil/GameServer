@@ -4,6 +4,10 @@
 
 class CUnit_Game : public CUnitClass
 {
+public:
+	void ContentsMonitor();
+
+private:
 	//virtual함수 영역
 	//packet이 있는 경우 사용만 하고 해제하지 말 것
 	virtual void OnClientJoin(DWORD64 sessionID, CPacket* packet);
@@ -34,5 +38,8 @@ private:
 private:
 	CLockFreeQueue<JOB> jobQ;
 	std::unordered_map<DWORD64, PLAYER*> playerMap;
+	int playerCnt = 0;
+	int totalFrame = 0;
+	int lastFrame = 0;
 };
 

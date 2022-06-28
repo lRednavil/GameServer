@@ -8,22 +8,22 @@ void CTestServer::Init()
     DWORD runningThreads;
     bool isNagle;
     DWORD maxConnect;
-    DWORD snap;
+    DWORD sendLatency;
 
-    GetPrivateProfileString(L"ChatServer", L"IP", L"0.0.0.0", IP, 16, L".//ServerSettings.ini");
-    PORT = GetPrivateProfileInt(L"ChatServer", L"PORT", NULL, L".//ServerSettings.ini");
-    createThreads = GetPrivateProfileInt(L"ChatServer", L"CreateThreads", NULL, L".//ServerSettings.ini");
-    runningThreads = GetPrivateProfileInt(L"ChatServer", L"RunningThreads", NULL, L".//ServerSettings.ini");
-    isNagle = GetPrivateProfileInt(L"ChatServer", L"isNagle", NULL, L".//ServerSettings.ini");
-    maxConnect = GetPrivateProfileInt(L"ChatServer", L"MaxConnect", NULL, L".//ServerSettings.ini");
-    snap = GetPrivateProfileInt(L"ChatServer", L"SnapLatency", 4, L".//ServerSettings.ini");
+    GetPrivateProfileString(L"GameServer", L"IP", L"0.0.0.0", IP, 16, L".//ServerSettings.ini");
+    PORT = GetPrivateProfileInt(L"GameServer", L"PORT", NULL, L".//ServerSettings.ini");
+    createThreads = GetPrivateProfileInt(L"GameServer", L"CreateThreads", NULL, L".//ServerSettings.ini");
+    runningThreads = GetPrivateProfileInt(L"GameServer", L"RunningThreads", NULL, L".//ServerSettings.ini");
+    isNagle = GetPrivateProfileInt(L"GameServer", L"isNagle", NULL, L".//ServerSettings.ini");
+    maxConnect = GetPrivateProfileInt(L"GameServer", L"MaxConnect", NULL, L".//ServerSettings.ini");
+    sendLatency = GetPrivateProfileInt(L"GameServer", L"sendLatency", 4, L".//ServerSettings.ini");
 
-    if ((PORT * createThreads * runningThreads * maxConnect * snap) == 0) {
+    if ((PORT * createThreads * runningThreads * maxConnect * sendLatency) == 0) {
         _FILE_LOG(LOG_LEVEL_ERROR, L"INIT_LOG", L"INVALID ARGUMENTS or No ini FILE");
         CRASH();
     }
 
-    Start(IP, PORT, createThreads, runningThreads, isNagle, maxConnect, snap);
+    Start(IP, PORT, createThreads, runningThreads, isNagle, maxConnect, sendLatency);
     monitorClient.Init();
 }
 
@@ -57,13 +57,9 @@ void CTestServer::ContentsMonitor()
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_SERVER_CPU, processMonitor.ProcessTotal(), tv);
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_SERVER_MEM, processMonitor.ProcessPrivateBytes() / 1024 / 1024, tv); // Mbyte¥‹¿ß∑Œ
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_SESSION, GetSessionCount(), tv);
-    monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_AUTH_PLAYER, playerMap.size(), tv);
-    monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_GAME_PLAYER, updateCnt - lastUpdateCnt, tv);
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_ACCEPT_TPS, GetAcceptTPS(), tv);
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_PACKET_RECV_TPS, GetRecvTPS(), tv);
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_PACKET_SEND_TPS, GetSendTPS(), tv);
-    monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_AUTH_THREAD_FPS, GetSendTPS(), tv);
-    monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_GAME_THREAD_FPS, GetSendTPS(), tv);
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_PACKET_POOL, GetPacketPoolUse(), tv);
 
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_MONITOR_CPU_TOTAL, processorMonitor.ProcessorTotal(), tv);

@@ -18,15 +18,20 @@ CUnit_Game gameClass;
 
 int main()
 {
-        authClass.InitClass(100, authClass.OPT_STOP, 6000);
+    test.Init();
+
+    authClass.InitClass(100, authClass.OPT_STOP, 10100);
     test.AttatchClass(L"Auth", &authClass);
 
-    gameClass.InitClass(100, gameClass.OPT_STOP, 6000);
+    gameClass.InitClass(100, gameClass.OPT_STOP, 10100);
     test.AttatchClass(L"Game", &gameClass);
 
 
     for (;;) {
         Sleep(1000);
+        test.ContentsMonitor();
+        authClass.ContentsMontior();
+        gameClass.ContentsMonitor();
     }
 
 

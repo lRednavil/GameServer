@@ -19,6 +19,5 @@ public:
 private:
 	CProcessMonitor processMonitor;
 	CProcessorMonitor processorMonitor;
-	CMonitorClient monitorClient;
 };
 

@@ -37,3 +37,4 @@ struct PLAYER {
 };
 
 extern CTLSMemoryPool<PLAYER> g_playerPool;
+extern CMonitorClient monitorClient;

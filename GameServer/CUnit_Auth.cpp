@@ -1,12 +1,23 @@
 #include "CUnit_Auth.h"
 
+void CUnit_Auth::ContentsMontior()
+{
+    int tv = time(NULL);
+
+    monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_AUTH_PLAYER, playerCnt, tv);
+    monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_AUTH_THREAD_FPS, totalFrame - lastFrame, tv);
+
+    lastFrame = totalFrame;
+}
+
 void CUnit_Auth::OnClientJoin(DWORD64 sessionID, CPacket* packet)
 {
+    playerCnt++;
 }
 
 void CUnit_Auth::OnClientLeave(DWORD64 sessionID)
 {
-
+    playerCnt--;
 }
 
 void CUnit_Auth::OnClientDisconnected(DWORD64 sessionID)
@@ -78,6 +89,7 @@ void CUnit_Auth::MsgUpdate()
 
 void CUnit_Auth::FrameUpdate()
 {
+    totalFrame++;
 }
 
 void CUnit_Auth::Recv_Login(DWORD64 sessionID, CPacket* packet)

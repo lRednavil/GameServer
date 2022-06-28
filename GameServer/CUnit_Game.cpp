@@ -1,5 +1,16 @@
 #include "CUnit_Game.h"
 
+
+void CUnit_Game::ContentsMonitor()
+{
+    int tv = time(NULL);
+
+    monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_GAME_PLAYER, playerCnt, tv);
+    monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_GAME_THREAD_FPS, totalFrame - lastFrame, tv);
+
+    lastFrame = totalFrame;
+}
+
 void CUnit_Game::OnClientJoin(DWORD64 sessionID, CPacket* packet)
 {
     if (packet == NULL) {
@@ -9,6 +20,7 @@ void CUnit_Game::OnClientJoin(DWORD64 sessionID, CPacket* packet)
     packet->GetData((char*)&player, sizeof(PLAYER*));
 
     playerMap.insert({ sessionID, player });
+    playerCnt++;
 }
 
 void CUnit_Game::OnClientLeave(DWORD64 sessionID)
@@ -16,13 +28,14 @@ void CUnit_Game::OnClientLeave(DWORD64 sessionID)
     if (playerMap.find(sessionID) != playerMap.end()) {
         playerMap.erase(sessionID);
     }
+    playerCnt--;
 }
 
 void CUnit_Game::OnClientDisconnected(DWORD64 sessionID)
 {
 
     if (playerMap.find(sessionID) != playerMap.end()) {
-        g_playerPool.Free(playerMap[sessionID]);
+        //g_playerPool.Free(playerMap[sessionID]);
         playerMap.erase(sessionID);
     }
 }
@@ -90,6 +103,7 @@ void CUnit_Game::MsgUpdate()
 
 void CUnit_Game::FrameUpdate()
 {
+    totalFrame++;
 }
 
 void CUnit_Game::Recv_Echo(DWORD64 sessionID, CPacket* packet)
