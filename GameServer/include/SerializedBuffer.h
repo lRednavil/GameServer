@@ -85,7 +85,7 @@ public:
 	----------------------------------------------------------------*/
 	enum en_PACKET
 	{
-		eBUFFER_DEFAULT = 1500		// 패킷의 기본 버퍼 사이즈.
+		eBUFFER_DEFAULT = 1460		// 패킷의 기본 버퍼 사이즈.
 	};
 
 	//////////////////////////////////////////////////////////////////////////
@@ -226,6 +226,8 @@ private:
 	template <class DATA> friend struct CHUNKNODE;
 	template <class DATA> friend class CTLSMemoryPool;
 	friend class CUnitClass;
+	friend class CNetClient;
+	friend class CLanServer;
 	friend class CNetServer;
 	friend class CGameServer;
 	//////////////////////////////////////////////////////////////////////////

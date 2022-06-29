@@ -232,7 +232,6 @@ private:
 	SESSION* sessionArr;
 	//stack for session index
 	CLockFreeStack<int> sessionStack;
-	CLockFreeQueue<DWORD64> sendSessionQ;
 
 	//monitor
 	DWORD sessionCnt;
