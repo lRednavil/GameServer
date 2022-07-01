@@ -55,13 +55,17 @@ void CTestServer::ContentsMonitor()
 {
     if (IsServerOn() == false) return;
     int tv = time(NULL);
+
+    DWORD64 recvTPS = GetRecvTPS();
+    DWORD64 sendTPS = GetSendTPS();
+
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_SERVER_RUN, 1, tv);
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_SERVER_CPU, processMonitor.ProcessTotal(), tv);
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_SERVER_MEM, processMonitor.ProcessPrivateBytes() / 1024 / 1024, tv); // Mbyte단위로
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_SESSION, GetSessionCount(), tv);
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_ACCEPT_TPS, GetAcceptTPS(), tv);
-    monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_PACKET_RECV_TPS, GetRecvTPS(), tv);
-    monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_PACKET_SEND_TPS, GetSendTPS(), tv);
+    monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_PACKET_RECV_TPS, recvTPS, tv);
+    monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_PACKET_SEND_TPS, sendTPS, tv);
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_PACKET_POOL, GetPacketPoolUse(), tv);
 
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_MONITOR_CPU_TOTAL, processorMonitor.ProcessorTotal(), tv);
@@ -70,6 +74,7 @@ void CTestServer::ContentsMonitor()
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_MONITOR_NETWORK_SEND, processorMonitor.EthernetSendTPS() / 1024, tv); //Kbytes단위로
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_MONITOR_AVAILABLE_MEMORY, processorMonitor.AvailableMemory(), tv);
 
+    wprintf(L"Recv TPS : %llu  || Send TPS : %llu \n", recvTPS, sendTPS);
 
     processMonitor.UpdateProcessTime();
     processorMonitor.UpdateHardwareTime();

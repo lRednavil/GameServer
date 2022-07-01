@@ -20,10 +20,10 @@ int main()
 {
     test.Init();
 
-    authClass.InitClass(100, authClass.OPT_STOP, 10100);
+    authClass.InitClass(60, authClass.OPT_STOP, 10100);
     test.AttatchClass(L"Auth", &authClass);
 
-    gameClass.InitClass(100, gameClass.OPT_STOP, 10100);
+    gameClass.InitClass(60, gameClass.OPT_STOP, 10100);
     test.AttatchClass(L"Game", &gameClass);
 
 

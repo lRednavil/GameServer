@@ -83,8 +83,10 @@ void CUnit_Game::OnError(int error, const WCHAR* msg)
 void CUnit_Game::MsgUpdate()
 {
     JOB job;
+    int lim = jobQ.GetSize();
 
-    while (jobQ.Dequeue(&job)) {
+    while (lim--) {
+        jobQ.Dequeue(&job);
         switch (job.type) {
         case en_PACKET_CS_GAME_REQ_ECHO:
         {
