@@ -43,18 +43,21 @@ void CUnit_Game::OnClientDisconnected(DWORD64 sessionID)
 void CUnit_Game::OnRecv(DWORD64 sessionID, CPacket* packet)
 {
     WORD type;
-    JOB job;
+    //JOB job;
 
     *packet >> type;
 
     switch (type) {
     case en_PACKET_CS_GAME_REQ_ECHO:
     {
-        job.type = en_PACKET_CS_GAME_REQ_ECHO;
-        job.sessionID = sessionID;
-        job.packet = packet;
+        //job.type = en_PACKET_CS_GAME_REQ_ECHO;
+        //job.sessionID = sessionID;
+        //job.packet = packet;
 
-        jobQ.Enqueue(job);
+        //jobQ.Enqueue(job);
+
+        Recv_Echo(sessionID, packet);
+        PacketFree(packet);
     }
     break;
 
