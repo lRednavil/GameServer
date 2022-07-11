@@ -66,6 +66,10 @@ void CUnit_Auth::OnError(int error, const WCHAR* msg)
 {
 }
 
+void CUnit_Auth::OnEnd()
+{
+}
+
 void CUnit_Auth::MsgUpdate()
 {
     JOB job;

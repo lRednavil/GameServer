@@ -17,15 +17,14 @@ void CTestServer::Init()
     runningThreads = GetPrivateProfileInt(L"GameServer", L"RunningThreads", NULL, L".//ServerSettings.ini");
     isNagle = GetPrivateProfileInt(L"GameServer", L"isNagle", NULL, L".//ServerSettings.ini");
     maxConnect = GetPrivateProfileInt(L"GameServer", L"MaxConnect", NULL, L".//ServerSettings.ini");
-    sendLatency = GetPrivateProfileInt(L"GameServer", L"sendLatency", 4, L".//ServerSettings.ini");
     packetSize = GetPrivateProfileInt(L"GameServer", L"packetSize", 1460, L".//ServerSettings.ini");
 
-    if ((PORT * createThreads * runningThreads * maxConnect * sendLatency) == 0) {
+    if ((PORT * createThreads * runningThreads * maxConnect) == 0) {
         _FILE_LOG(LOG_LEVEL_ERROR, L"INIT_LOG", L"INVALID ARGUMENTS or No ini FILE");
         CRASH();
     }
 
-    Start(IP, PORT, createThreads, runningThreads, isNagle, maxConnect, sendLatency, packetSize);
+    Start(IP, PORT, createThreads, runningThreads, isNagle, maxConnect, packetSize);
     monitorClient.Init();
 }
 

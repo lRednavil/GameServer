@@ -43,21 +43,18 @@ void CUnit_Game::OnClientDisconnected(DWORD64 sessionID)
 void CUnit_Game::OnRecv(DWORD64 sessionID, CPacket* packet)
 {
     WORD type;
-    //JOB job;
+    JOB job;
 
     *packet >> type;
 
     switch (type) {
     case en_PACKET_CS_GAME_REQ_ECHO:
     {
-        //job.type = en_PACKET_CS_GAME_REQ_ECHO;
-        //job.sessionID = sessionID;
-        //job.packet = packet;
+        job.type = en_PACKET_CS_GAME_REQ_ECHO;
+        job.sessionID = sessionID;
+        job.packet = packet;
 
-        //jobQ.Enqueue(job);
-
-        Recv_Echo(sessionID, packet);
-        PacketFree(packet);
+        jobQ.Enqueue(job);
     }
     break;
 
@@ -80,6 +77,10 @@ void CUnit_Game::OnTimeOut(DWORD64 sessionID)
 }
 
 void CUnit_Game::OnError(int error, const WCHAR* msg)
+{
+}
+
+void CUnit_Game::OnEnd()
 {
 }
 
@@ -112,11 +113,6 @@ void CUnit_Game::FrameUpdate()
 }
 
 void CUnit_Game::Recv_Echo(DWORD64 sessionID, CPacket* packet)
-{
-    Res_Echo(sessionID, packet);
-}
-
-void CUnit_Game::Res_Echo(DWORD64 sessionID, CPacket* packet)
 {
     CPacket* sendMsg = PacketAlloc();
     constexpr WORD type = en_PACKET_CS_GAME_RES_ECHO;

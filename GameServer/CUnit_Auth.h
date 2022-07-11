@@ -25,6 +25,8 @@ private:
 
 	virtual void OnError(int error, const WCHAR* msg);
 
+	virtual void OnEnd();
+
 	//gameserver용
 	//jobQ에 EnQ된 메세지들 처리
 	virtual void MsgUpdate();
