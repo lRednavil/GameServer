@@ -1,11 +1,12 @@
 #include "CUnit_Game.h"
 
+long totalGameUser = 0;
 
 void CUnit_Game::ContentsMonitor()
 {
     int tv = time(NULL);
 
-    monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_GAME_PLAYER, playerCnt, tv);
+    monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_GAME_PLAYER, totalGameUser, tv);
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_GAME_GAME_THREAD_FPS, totalFrame - lastFrame, tv);
 
     lastFrame = totalFrame;
@@ -20,6 +21,7 @@ void CUnit_Game::OnClientJoin(DWORD64 sessionID, CPacket* packet)
     packet->GetData((char*)&player, sizeof(PLAYER*));
 
     playerMap.insert({ sessionID, player });
+    InterlockedIncrement(&totalGameUser);
     playerCnt++;
 }
 
@@ -28,6 +30,7 @@ void CUnit_Game::OnClientLeave(DWORD64 sessionID)
     if (playerMap.find(sessionID) != playerMap.end()) {
         playerMap.erase(sessionID);
     }
+    InterlockedDecrement(&totalGameUser);
     playerCnt--;
 }
 
@@ -37,6 +40,7 @@ void CUnit_Game::OnClientDisconnected(DWORD64 sessionID)
         g_playerPool.Free(playerMap[sessionID]);
         playerMap.erase(sessionID);
     }
+    InterlockedDecrement(&totalGameUser);
     playerCnt--;
 }
 

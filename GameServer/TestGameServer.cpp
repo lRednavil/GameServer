@@ -1,4 +1,4 @@
-#include "GameServer.h"
+#include "TestGameServer.h"
 
 void CTestServer::Init()
 {
