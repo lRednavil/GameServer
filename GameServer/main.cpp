@@ -15,6 +15,7 @@ WCHAR IP[16] = L"127.0.0.1";
 CTestServer test;
 CUnit_Auth authClass;
 CUnit_Game gameClass;
+CUnit_Game gameClass2;
 
 int main()
 {
@@ -23,8 +24,10 @@ int main()
     authClass.InitClass(60, 10100);
     test.AttatchClass(L"Auth", &authClass);
 
-    gameClass.InitClass(60, 10100);
-    test.AttatchClass(L"Game", &gameClass, 2);
+    gameClass.InitClass(60, 5000);
+    gameClass2.InitClass(60, 5000);
+    test.AttatchClass(L"Game", &gameClass);
+    test.AttatchClass(L"Game", &gameClass2);
 
     for (;;) {
         Sleep(1000);

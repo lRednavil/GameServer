@@ -18,7 +18,6 @@ public:
 
 	void Enqueue(DATA val);
 	bool Dequeue(DATA* val);
-	bool DequeueOnSingleThreaded(DATA* val);
 
 	int GetSize();
 
@@ -124,39 +123,6 @@ inline bool CLockFreeQueue<DATA>::Dequeue(DATA* val)
 			memPool.Free(headVal);
 			return true;
 		}
-	}
-
-	return false;
-}
-
-template<class DATA>
-inline bool CLockFreeQueue<DATA>::DequeueOnSingleThreaded(DATA* val)
-{
-	if (InterlockedDecrement((long*)&size) < 0) {
-		InterlockedIncrement((long*)&size);
-		return false;
-	}
-
-	for (;;) {
-		QUEUE_NODE<DATA>* volatile head = headNode;
-		QUEUE_NODE<DATA>* volatile tail = tailNode;
-		QUEUE_NODE<DATA>* volatile headVal = (QUEUE_NODE<DATA>*)((__int64)head & NODEMASK);
-		QUEUE_NODE<DATA>* volatile next = headVal->next;
-		QUEUE_NODE<DATA>* volatile nextVal = (QUEUE_NODE<DATA>*)((__int64)next & NODEMASK);
-
-		//만약 노드가 존재하나 반영이 안된 경우 대비 || head가 tail보다 앞서는 것 역시 방지
-		if (head == tail) {
-			if (next != NULL) {
-				tailNode = next;
-			}
-			continue;
-		}
-
-		headNode = next;
-		
-		memmove(val, &nextVal->val, sizeof(DATA));
-		memPool.Free(headVal);
-		return true;
 	}
 
 	return false;

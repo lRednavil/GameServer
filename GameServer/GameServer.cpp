@@ -73,6 +73,7 @@ void CTestServer::ContentsMonitor()
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_MONITOR_NETWORK_SEND, processorMonitor.EthernetSendTPS() / 1024, tv); //Kbytes¥‹¿ß∑Œ
     monitorClient.UpdateMonitorInfo(dfMONITOR_DATA_TYPE_MONITOR_AVAILABLE_MEMORY, processorMonitor.AvailableMemory(), tv);
 
+    wprintf(L"Total Accept : %llu \n", totalAccept);
     wprintf(L"Recv TPS : %llu  || Send TPS : %llu \n", recvTPS, sendTPS);
 
     processMonitor.UpdateProcessTime();
